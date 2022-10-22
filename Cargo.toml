@@ -1,8 +1,12 @@
 [package]
+description = "A simple interface for authoring Git commit messages according to the Conventional Commits specification."
+authors = ["Daniel Way <contact@danieldway.com>"]
 name = "git-cc"
-version = "0.1.0"
-edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+version = "1.0.0-beta.0"
+license = "MIT"
+edition = "2021"
+repository = "https://github.com/danielway/git-cc"
+exclude = [".github"]
 
 [dependencies]
+tty-form = "2.0.0-beta.0"
