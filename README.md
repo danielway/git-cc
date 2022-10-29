@@ -3,6 +3,12 @@
 A simple interface for authoring Git commit messages according to the 
 [Conventional Commits specification](https://www.conventionalcommits.org).
 
+## Installation
+
+Simply build the application with `cargo build --release` or download a prebuilt binary from a 
+release in GitHub, then place that binary in your `PATH`. As long as you have Git installed and 
+have left the binary named `git-cc`, it should then be invokable as `git cc`.
+
 ## Operation
 
 When invoked through `git cc`, an interface is presented which guides the user 
