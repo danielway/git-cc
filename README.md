@@ -3,6 +3,8 @@
 A simple interface for authoring Git commit messages according to the 
 [Conventional Commits specification](https://www.conventionalcommits.org).
 
+https://user-images.githubusercontent.com/1724257/200127461-176898e8-1216-4c94-bc72-630a2fdb995e.mov
+
 ## Installation
 
 Build the application with `cargo build --release` or download a prebuilt binary from a 
