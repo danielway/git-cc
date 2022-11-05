@@ -9,5 +9,5 @@ repository = "https://github.com/danielway/git-cc"
 exclude = [".github"]
 
 [dependencies]
-tty-form = "2.0.0-beta.3"
-tty-interface = "4.0.0-beta.4"
+tty-form = "2.0.0-beta.5"
+tty-interface = "4.0.0-beta.6"
