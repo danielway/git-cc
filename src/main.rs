@@ -22,8 +22,8 @@ fn execute() -> Result<()> {
     let (breaking_step, breaking_change) = add_breaking();
     add_summary(&mut form, breaking_change);
     add_description(&mut form);
-    add_trailers(&mut form);
     breaking_step.add_to(&mut form);
+    add_trailers(&mut form);
 
     let mut stdout = stdout();
     let mut stdin = StdinDevice;
