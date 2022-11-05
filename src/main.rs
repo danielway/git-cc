@@ -1,15 +1,15 @@
 use std::{
     io::{stdout, Write},
-    process::Command,
+    process::exit,
 };
 
-use git::commit;
+use git::{commit, has_staged_changes};
 use tty_form::{
     control::{Control, SelectInput, StaticText, TextInput},
     dependency::{Action, DependencyId, Evaluation},
     device::StdinDevice,
     step::{CompoundStep, KeyValueStep, Step, TextBlockStep, YesNoStep},
-    Form, Result,
+    Error, Form, Result,
 };
 use tty_interface::Interface;
 
@@ -20,6 +20,11 @@ fn main() {
 }
 
 fn execute() -> Result<()> {
+    if !has_staged_changes()? {
+        eprintln!("There are no staged changes to commit.");
+        exit(1);
+    }
+
     let mut form = Form::new();
 
     let (breaking_step, breaking_change) = add_breaking();
@@ -30,15 +35,19 @@ fn execute() -> Result<()> {
 
     let mut stdout = stdout();
     let mut stdin = StdinDevice;
-
     let mut interface = Interface::new_relative(&mut stdout)?;
 
-    if let Ok(message) = form.execute(&mut interface, &mut stdin) {
-        interface.exit()?;
+    let result = form.execute(&mut interface, &mut stdin);
+    interface.exit()?;
 
-        let output = commit(&message)?;
-        std::io::stdout().write_all(&output.stdout)?;
-        std::io::stderr().write_all(&output.stderr)?;
+    match result {
+        Ok(message) => {
+            let output = commit(&message)?;
+            std::io::stdout().write_all(&output.stdout)?;
+            std::io::stderr().write_all(&output.stderr)?;
+        }
+        Err(Error::Canceled) => {}
+        Err(err) => eprintln!("An unexpected error occurred: {:?}", err),
     }
 
     Ok(())
