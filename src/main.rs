@@ -3,6 +3,7 @@ use std::{
     process::Command,
 };
 
+use git::commit;
 use tty_form::{
     control::{Control, SelectInput, StaticText, TextInput},
     dependency::{Action, DependencyId, Evaluation},
@@ -11,6 +12,8 @@ use tty_form::{
     Form, Result,
 };
 use tty_interface::Interface;
+
+mod git;
 
 fn main() {
     execute().expect("should commit successfully");
@@ -29,17 +32,11 @@ fn execute() -> Result<()> {
     let mut stdin = StdinDevice;
 
     let mut interface = Interface::new_relative(&mut stdout)?;
-    
+
     if let Ok(message) = form.execute(&mut interface, &mut stdin) {
         interface.exit()?;
 
-        let output = Command::new("git")
-            .arg("commit")
-            .arg("-m")
-            .arg(message)
-            .output()
-            .expect("failed to execute process");
-    
+        let output = commit(&message)?;
         std::io::stdout().write_all(&output.stdout)?;
         std::io::stderr().write_all(&output.stderr)?;
     }
