@@ -2,7 +2,7 @@
 description = "A simple interface for authoring Git commit messages according to the Conventional Commits specification."
 authors = ["Daniel Way <contact@danieldway.com>"]
 name = "git-cc"
-version = "1.0.0-beta.0"
+version = "1.0.0"
 license = "MIT"
 edition = "2021"
 repository = "https://github.com/danielway/git-cc"
