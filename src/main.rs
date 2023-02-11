@@ -72,6 +72,7 @@ fn add_summary(form: &mut Form, breaking_change: Option<DependencyId>) {
             ("bug", "fixed existing behavior"),
             ("docs", "added documentation"),
             ("chore", "non-source changes"),
+            ("release", "released a new version"),
         ],
     )
     .add_to(&mut commit_summary);
