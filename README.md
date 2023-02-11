@@ -32,6 +32,11 @@ description, body, and footers and attempt to constrain input according to the
 specification. Throughout the interface, the user may continue to a next step 
 with `ENTER`/`Tab`, return to a previous step with `ESC`/`BackTab`, or quit with `CTRL+C`.
 
+### Quick Mode
+
+If invoked as `git cc -q`, a shorter prompt sequence is presented including only the first
+description line and omitting the body, breaking changes, and trailers.
+
 ### Step 1: Description
 
 The first step prompts for three summary-level values.
