@@ -1,4 +1,5 @@
 use std::{
+    env,
     io::{stdout, Write},
     process::exit,
 };
@@ -25,13 +26,20 @@ fn execute() -> Result<()> {
         exit(1);
     }
 
+    let args: Vec<String> = env::args().collect();
+    let quick_mode = args.len() > 1 && args[1].to_lowercase().trim() == "-q";
+
     let mut form = Form::new();
 
-    let (breaking_step, breaking_change) = add_breaking();
-    add_summary(&mut form, breaking_change);
-    add_description(&mut form);
-    breaking_step.add_to(&mut form);
-    add_trailers(&mut form);
+    if quick_mode {
+        add_summary(&mut form, None);
+    } else {
+        let (breaking_step, breaking_change) = add_breaking();
+        add_summary(&mut form, Some(breaking_change));
+        add_description(&mut form);
+        breaking_step.add_to(&mut form);
+        add_trailers(&mut form);
+    }
 
     let mut stdout = stdout();
     let mut stdin = StdinDevice;
@@ -53,7 +61,7 @@ fn execute() -> Result<()> {
     Ok(())
 }
 
-fn add_summary(form: &mut Form, breaking_change: DependencyId) {
+fn add_summary(form: &mut Form, breaking_change: Option<DependencyId>) {
     let mut commit_summary = CompoundStep::new();
     commit_summary.set_max_line_length(80);
 
@@ -81,9 +89,11 @@ fn add_summary(form: &mut Form, breaking_change: DependencyId) {
     closing_paren.set_dependency(empty_scope, Action::Hide);
     closing_paren.add_to(&mut commit_summary);
 
-    let mut breaking_bang = StaticText::new("!");
-    breaking_bang.set_dependency(breaking_change, Action::Show);
-    breaking_bang.add_to(&mut commit_summary);
+    if let Some(breaking_change) = breaking_change {
+        let mut breaking_bang = StaticText::new("!");
+        breaking_bang.set_dependency(breaking_change, Action::Show);
+        breaking_bang.add_to(&mut commit_summary);
+    }
 
     StaticText::new(": ").add_to(&mut commit_summary);
 
