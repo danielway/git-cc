@@ -21,13 +21,16 @@ fn main() {
 }
 
 fn execute() -> Result<()> {
+    let (quick_mode, add_changes) = process_args();
+
+    if add_changes {
+        git::add()?;
+    }
+    
     if !has_staged_changes()? {
         eprintln!("There are no staged changes to commit.");
         exit(1);
     }
-
-    let args: Vec<String> = env::args().collect();
-    let quick_mode = args.len() > 1 && args[1].to_lowercase().trim() == "-q";
 
     let mut form = Form::new();
 
@@ -59,6 +62,28 @@ fn execute() -> Result<()> {
     }
 
     Ok(())
+}
+
+// Parse a single command line argument for "q" for quick mode or "a" to add changes or both.
+fn process_args() -> (bool, bool) {
+    let args: Vec<String> = env::args().collect();
+    let mut quick_mode = false;
+    let mut add_changes = false;
+
+    if args.len() > 1 {
+        let arg = args[1].to_lowercase().trim().to_string();
+
+        if arg == "-q" {
+            quick_mode = true;
+        } else if arg == "-a" {
+            add_changes = true;
+        } else if arg == "-qa" || arg == "-aq" {
+            quick_mode = true;
+            add_changes = true;
+        }
+    }
+
+    (quick_mode, add_changes)
 }
 
 fn add_summary(form: &mut Form, breaking_change: Option<DependencyId>) {
