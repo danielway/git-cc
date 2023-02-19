@@ -22,6 +22,14 @@ pub fn has_staged_changes() -> Result<bool, Error> {
     Ok(staged_changes.count() >= 1)
 }
 
+/// Stage all changes in the repo.
+pub fn add() -> Result<Output, Error> {
+    Command::new("git")
+        .arg("add")
+        .arg(".")
+        .output()
+}
+
 /// Perform a commit with the specified messages. Does not validate the repo's status.
 pub fn commit(message: &str) -> Result<Output, Error> {
     Command::new("git")
