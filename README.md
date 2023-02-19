@@ -35,7 +35,13 @@ with `ENTER`/`Tab`, return to a previous step with `ESC`/`BackTab`, or quit with
 ### Quick Mode
 
 If invoked as `git cc -q`, a shorter prompt sequence is presented including only the first
-description line and omitting the body, breaking changes, and trailers.
+description line and omitting the body, breaking changes, and trailers. May be combined with adding
+changes as `git cc -qa`.
+
+### Adding Changes
+
+If invoked as `git cc -a`, all local changes are staged for commit automatically. May be combined
+with quick mode as `git cc -aq`.
 
 ### Step 1: Description
 
